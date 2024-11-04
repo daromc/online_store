@@ -1,0 +1,337 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<!--Here import all the libraries bootstrap 5.3, jquery 3.6-->
+		<meta charset="utf-8">
+		<title>Final - Store</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="styles.css">
+		<script src="scripts/cookie-manager.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.0/font/bootstrap-icons.min.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	</head>
+	<body>
+	<!--Here begin the Title of the project and the button that show the shopping cart-->
+	<div class="container">
+		<div class ="row mt-5">
+			<div class="col-10">
+				<h1>ICS 128 FINAL PROJECT - My Store Dario</h1>
+				<p>Pulling together ICS 118 adn ICS 128 into one demostration.</p>
+			</div>
+			<div class="col-2">
+				<button id="view_cart" class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View Cart <i class="bi bi-cart4"></i></button>
+			</div>
+		</div>
+		<!--Here enter the products from the script.js file and the API info-->
+
+		<div id="products_row" class="row row-cols-1 row-cols-md-3 g-4 mt-5">
+			<!--Her come the products cols from the first API in script.js-->
+		</div>
+	</div>
+	<!--Here finish the first section-->
+	<!--Off canvas start - it have the shopping cart info -->
+	<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+		<div class="offcanvas-header">
+			<h5 id="offcanvasRightLabel">Total Shopping Cart</h5>
+			<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<!--Here select the currency 1 for CAD 2 for USD and 3 for COP-->
+			<select id="selected_currency" class="form-select mb-3">
+			  <option selected value="1">Canadian Dollars $</option>
+			  <option value="2">US Dollars $</option>
+			  <option value="3">Colombian Pesos $</option>
+			</select>
+			<div >
+				<!--here for 5 colomns created to containt the delete_btn, item, quantity, price, total of the adding products-->
+				<div id="canvas_shopping_car_subtotal" class="row row-cols-5">
+					<div class="col-2 mb-1 text-center"><b>Delete</b></div>
+					<div class="col-4 mb-1 text-center"><b>Item</b></div>
+					<div class="col-2 mb-1 text-center"><b>Qty</b></div>
+					<div class="col-2 mb-1 text-center"><b>Price</b></div>
+					<div class="col-2 mb-1 text-end"><b>Total</b></div>
+					<div class="col-12 mb-1" ><hr></div>
+				</div>
+			</div>
+			
+			<hr>
+			<!-- here 2 col to the total amount and the 2 bts checkout and clear-->
+			<div id="canvas_shopping_car_total" class="text-end">
+			
+			</div>
+			<hr>
+			<div class="row row-cols-2">
+			
+				<button id="car_checkout_btn" onclick="order_checkout_()" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#link_Modal" data-bs-dismiss="modal">Checkout</button>
+				<button id="car_clear_btn" onclick="car_clear_()" class="btn btn-warning mt-3">Empty Cart</button>
+			
+			</div>
+		</div>
+	</div>
+	<!--end off canvas-->
+
+	<!-- Start the Modal - the modal containt the 4 steps to complete the purchase -->
+	<div class="modal fade" id="link_Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+				<h5 class="modal-title" id="ModalLabel">Checkout</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+						<div class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+							<div class="row row-cols-4">
+								<!--four cols to show the payment, billig, shipping and order tabs-->
+								<div class="nav-item col-3 mb-1 text-center" role="presentation">
+									<button class="nav-link active" id="pills-payment-tab" data-bs-toggle="pill" data-bs-target="#pills-payment" type="button" role="tab" aria-controls="pills-payment" aria-selected="true"><ion-icon name="card-sharp"></ion-icon><i class="bi bi-credit-card"></i> Payment Method </button>
+								</div>
+								<div class="nav-item col-2=3 mb-1 text-center" role="presentation">
+									<button class="nav-link" id="pills-billing-tab" data-bs-toggle="pill" data-bs-target="#pills-billing" type="button" role="tab" aria-controls="pills-billing" aria-selected="false"><i class="bi bi-person-video2"></i> Billing Details </button>
+								</div>
+								<div class="nav-item col-3 mb-1 text-center" role="presentation">
+									<button class="nav-link" id="pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#pills-shipping" type="button" role="tab" aria-controls="pills-shipping" aria-selected="false"><i class="bi bi-truck"></i> Shipping Details</button>
+								</div>
+								<div class="nav-item col-3 mb-1 text-center" role="presentation">
+									<button class="nav-link" id="pills-order-tab" data-bs-toggle="pill" data-bs-target="#pills-order" type="button" role="tab" aria-controls="pills-order" aria-selected="false"><i class="bi bi-bag-check"></i> Order Confirmation</button>
+								</div>
+							</div>
+						</div>
+						
+					<div class="tab-content" id="pills-tabContent">
+						<!--first section payment details - credict card, mm yy and cvv -->
+							<div class="tab-pane fade show active" id="pills-payment" role="tabpanel" aria-labelledby="pills-payment-tab">
+							<h3 class="text-center"><b>Payment Method</b></h3>
+							<form class="row g-3">
+								<label for="cardNumber" class="form-label">Card Number</label>
+								<input type="text" class="form-control" id="cardNumber" placeholder="1111 2222 3333 4444">
+								<p id="text_invalid_credit_card" class="form-label"></p>
+								<div class="col-md-3">
+									<label for="expirationDate_mm" class="form-label">Expiration Date</label>
+									<select class="form-select" id="expirationDate_mm" required>
+										<option selected disabled value="">Choose...</option>
+										<option>01</option>
+										<option>02</option>
+										<option>03</option>
+										<option>04</option>
+										<option>05</option>
+										<option>06</option>
+										<option>07</option>
+										<option>08</option>
+										<option>09</option>
+										<option>10</option>
+										<option>11</option>
+										<option>12</option>
+									</select>
+								</div>
+								<div class="col-md-3">
+									<label for="expirationDate_yy" class="form-label text-white" >|</label>
+									<input type="text" class="form-control" id="expirationDate_yy" placeholder="YYYY">
+								</div>
+								<div class="col-md-6">
+									<label for="cardNumber_cvv" class="form-label">Security code</label>
+									<input type="text" class="form-control" id="cardNumber_cvv" placeholder="123">
+								</div>
+								<div class="col-12">
+									<button class="btn btn-primary btn-continue mt-3" data-bs-toggle="pill" data-bs-target="#pills-billing">Continue</button>
+								</div>
+							</form>
+						</div>
+						<!--second section billing details - Name, address, postal code, email -->
+						<div class="tab-pane fade" id="pills-billing" role="tabpanel" aria-labelledby="pills-billing-tab">
+						
+						<form class="row g-3">
+							<div class="col-md-6">
+								<label for="inputFName" class="form-label">First Name</label>
+								<input type="text" class="form-control" id="inputFName"  placeholder="First Name">
+							</div>
+							<div class="col-md-6">
+								<label for="inputLName" class="form-label">Last Name</label>
+								<input type="text" class="form-control" id="inputLName"  placeholder="Last Name">
+							</div>
+							<div class="col-12">
+								<label for="inputAddress" class="form-label">Billing Address Line 1</label>
+								<input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+							</div>
+							<div class="col-12">
+								<label for="inputAddress2" class="form-label">Billing Address Line 2</label>
+								<input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+							</div>
+							<div class="col-md-6">
+								<label for="inputCity" class="form-label">City</label>
+								<input type="text" class="form-control" id="inputCity" placeholder="Victoria">
+							</div>
+							<div class="col-md-6">
+								<label for="inputProvince" class="form-label">Province</label>
+								<select id="inputProvince" class="form-select mb-3">
+									<option>Alberta</option>
+									<option selected>BC</option>
+									<option>Manitoba</option>
+									<option>New Brunswick</option>
+									<option>New Foundland and Labrador</option>
+									<option>Nova Scotia</option>
+									<option>Ontario</option>
+									<option>Princes Edward Island</option>
+									<option>Quebec</option>
+									<option>Saskatchewan</option>
+									<option>Northwest Territories</option>
+									<option>Nunavut</option>
+									<option>Yukon</option>
+								</select>
+							</div>
+							<div class="col-md-6">
+								<label for="inputCountry" class="form-label">Country</label>
+								<select id="inputCountry" class="form-select mb-3">
+									<option selected value="1">Canada</option>
+									<option value="2">US</option>
+									<option value="3">Colombia</option>
+								</select>
+							</div>
+							<div class="col-md-6">
+								<label for="inputPostalcode" class="form-label">Postal Code</label>
+								<input type="text" class="form-control" id="inputPostalcode" placeholder="V9V 1V2">
+							</div>
+							<div class="col-md-12">
+								<label for="inputPhonenumber" class="form-label">Phone Number</label>
+								<input type="text" class="form-control" id="inputPhonenumber" placeholder="1231234567">
+							</div>
+							<div class="col-md-12">
+								<label for="inputEmail" class="form-label">E-mail</label>
+								<input type="text" class="form-control" id="inputEmail" placeholder="example@example.com">
+							</div>
+							<div class="col-12">
+								<button type="submit" class="btn btn-primary btn-continue mt-3">Continue</button>
+							</div>
+						</form>
+						
+						</div>
+						<!--third section shipping details - Name, address, postal code, email -->
+						<div class="tab-pane fade" id="pills-shipping" role="tabpanel" aria-labelledby="pills-shipping-tab">
+							<div class="form-check mb-3">
+									<input class="form-check-input" type="checkbox" value="1" id="shipping_CheckChecked" checked>
+									<label class="form-check-label mb-3" for="shipping_CheckChecked">
+										Shipping information is the same as my Billing details
+									</label>
+									<form id="shipping_form" class="row g-3">
+										<div class="col-md-6">
+											<label for="inputFName_shipping" class="form-label">First Name</label>
+											<input type="text" class="form-control" id="inputFName_shipping"  placeholder="First Name">
+										</div>
+										<div class="col-md-6">
+											<label for="inputLName_shipping" class="form-label">Last Name</label>
+											<input type="text" class="form-control" id="inputLName_shipping"  placeholder="Last Name">
+										</div>
+										<div class="col-12">
+											<label for="inputAddress_shipping" class="form-label">Shipping Address Line 1</label>
+											<input type="text" class="form-control" id="inputAddress_shipping" placeholder="1234 Main St">
+										</div>
+										<div class="col-12">
+											<label for="inputAddress2_shipping" class="form-label">Shipping Address Line 2</label>
+											<input type="text" class="form-control" id="inputAddress2_shipping" placeholder="Apartment, studio, or floor">
+										</div>
+										<div class="col-md-6">
+											<label for="inputCity_shipping" class="form-label">City</label>
+											<input type="text" class="form-control" id="inputCity_shipping">
+										</div>
+										<div class="col-md-6">
+											<label for="inputProvince_shipping" class="form-label">Province</label>
+											<select id="inputProvince_shipping" class="form-select mb-3">
+												<option>Alberta</option>
+												<option>BC</option>
+												<option>Manitoba</option>
+												<option>New Brunswick</option>
+												<option>New Foundland and Labrador</option>
+												<option>Nova Scotia</option>
+												<option>Ontario</option>
+												<option>Princes Edward Island</option>
+												<option>Quebec</option>
+												<option>Saskatchewan</option>
+												<option>Northwest Territories</option>
+												<option>Nunavut</option>
+												<option>Yukon</option>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<label for="inputCountry_shipping" class="form-label">Country</label>
+											<select id="inputCountry_shipping" class="form-select mb-3">
+												<option selected value="1">Canada</option>
+												<option value="2">US</option>
+												<option value="3">Colombia</option>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<label for="inputPostalcode_shipping" class="form-label">Postal Code</label>
+											<input type="text" class="form-control" id="inputPostalcode_shipping" placeholder="V9C 1M7">
+										</div>
+									</form>
+
+								<div class="col-12">
+									<button type="submit" class="btn btn-primary btn-continue mt-3">Continue</button>
+								</div>
+							</div>
+						</div>
+						<!--forth section order details - Final product price with taxes submit button to end point-->
+						<div class="tab-pane fade" id="pills-order" role="tabpanel" aria-labelledby="pills-order-tab">
+							<h3 class="text-center mb-3">Order Details</h3>
+							<hr>
+							<div id="order_details" class="row row-cols-4 container">
+								<div class="col mb-3 text-center"><b>Item</b></div>
+								<div class="col mb-3 text-center"><b>Quantity</b></div>
+								<div class="col mb-3 text-center"><b>Price</b></div>
+								<div class="col mb-3 text-end"><b>Total</b></div>
+							</div>
+							<div id="order_details_totals" class="row row-cols-2 container">
+								<hr class="col-12 mb-2 mt-2">
+								<div class="col mb-2 text-start"><b>Subtotal</b></div>
+								<div id ="order_details_totals_sub" class="col mb-2 text-end"><b><span>$</span> 0.00</b></div>
+								<hr class="col-12 mb-2 mt-2">
+								<div class="col mb-2 text-start"><b>Shipping</b></div>
+								<div id ="order_details_totals_shipping" class="col mb-2 text-end"><b><span>$</span> 0.00</b></div>
+								<hr class="col-12 mb-2 mt-2">
+								<div class="col mb-2 text-start"><b>Tax</b></div>
+								<div id ="order_details_totals_tax" class="col mb-2 text-end"><b><span>$</span> 0.00</b></div>
+								<hr class="col-12 mb-2 mt-2">
+								<div class="col mb-2 text-start"><b>Order Total</b></div>
+								<div id ="order_details_totals_total" class="col mb-2 text-end"><b><span>$</span> 0.00</b></div>
+								<hr class="col-12 mb-2 mt-2">
+							</div>
+							<div class="col-12">
+								<h4 id="final_errors_validation" class="text-danger text-center">Here show the errors</h4>
+							</div>
+
+							<div class="col-12">
+								<button type="submit" onclick="send_data_end_point_()" class="btn btn-primary mt-3" data-bs-target="#submit_ModalToggle2" data-bs-toggle="modal" data-bs-dismiss="modal">Complete Order Now</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	  </div>
+	</div>
+	<!-- Modal Success submit-->
+	<div class="modal fade" id="submit_ModalToggle2" aria-hidden="true" aria-labelledby="submit_ModalLabel" tabindex="1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title text-success" id="submit_ModalLabel"><i class="bi bi-bag-check text-success"></i></h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<!-- Second modal content -->
+					<p id="final_info"></p>
+					<p></p>
+				</div>
+				<div class="modal-footer">
+					<button id="close_success_modal" type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end the second Modal -->
+
+	<!--scripts bootstrap and js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+	<script src="scripts/script.js"></script>
+	</body>
+</html>
